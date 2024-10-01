@@ -15,7 +15,7 @@ CITY_DATA = {
 MONTHS = ('january', 'february', 'march', 'april', 'may', 'june')
 WEEKDAYS = ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday')
 
-def get_user_input(prompt, valid_choices):
+def get_user_input(prompt, CC):
     """Get a valid input from the user."""
     while True:
         user_input = input(prompt).lower().strip()
@@ -24,9 +24,9 @@ def get_user_input(prompt, valid_choices):
 
         if ',' in user_input:
             choices = [choice.strip() for choice in user_input.split(',')]
-            if all(choice in valid_choices for choice in choices):
+            if all(choice in CC for choice in choices):
                 return choices
-        elif user_input in valid_choices:
+        elif user_input in CC:
             return user_input
 
         prompt = "Invalid input. Please try again:\n>"
