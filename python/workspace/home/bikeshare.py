@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import click
 
+# hi
+
 # Constants
 CITY_DATA = {
     'chicago': 'chicago.csv',
