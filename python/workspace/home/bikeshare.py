@@ -15,6 +15,7 @@ WEEKDAYS = ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 's
 
 def get_user_input(prompt, CC):
     """Get a valid input from the user."""
+    
     while True:
         user_input = input(prompt).lower().strip()
         if user_input == 'end':
@@ -30,6 +31,7 @@ def get_user_input(prompt, CC):
         prompt = "Invalid input. Please try again:\n>"
 
 def get_filters():
+    ## add coment in function get_filters()
     """Ask the user to specify city(ies), month(s), and day(s)."""
     print("\nLet's explore some US bikeshare data!\n")
     print("Type 'end' at any time to exit the program.\n")
