@@ -50,6 +50,8 @@ def get_filters():
         return get_filters()
 
 def load_data(city, month, day):
+    ## add coment in function load_data
+
     """Load and filter data based on the user's choices."""
     print("\nLoading data...")
     start_time = time.time()
