@@ -1,24 +1,17 @@
->**Note**: Please **fork** the current Udacity repository so that you will have a **remote** repository in **your** Github account. Clone the remote repository to your local machine. Later, as a part of the project "Post your Work on Github", you will push your proposed changes to the remote repository in your Github account.
-
-### Date created
-Include the date you created this project and README file.
+### Project Date
+2-10-2024
 
 ### Project Title
-Replace the Project Title
+Project 5 : Post your Work on GitHub
 
 ### Description
-Describe what your project is about and what it does
-
-### Files used
-Include the files used
+### check my project through this link https://github.com/Ahmad-Jaber0/pdsnd_github.git
 
 ### Credits
-It's important to give proper credit. Add links to any repo that inspired you or blogposts you consulted.
+Thanks to UDACITY for providing guidance and support throughout the project.
 
-### NEW To section 2
-1- First
-2- Second
-3- third
+### Files
+Git Commands Documentation.pdf
 
-### Section 3
-onther Change
+
+### Git documentation is very Easy.
