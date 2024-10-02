@@ -13,9 +13,8 @@ CITY_DATA = {
 MONTHS = ('january', 'february', 'march', 'april', 'may', 'june')
 WEEKDAYS = ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday')
 
-def get_user_input(prompt, CC):
+def get_user_input(prompt, valid_choices):
     """Get a valid input from the user."""
-    
     while True:
         user_input = input(prompt).lower().strip()
         if user_input == 'end':
@@ -23,15 +22,14 @@ def get_user_input(prompt, CC):
 
         if ',' in user_input:
             choices = [choice.strip() for choice in user_input.split(',')]
-            if all(choice in CC for choice in choices):
+            if all(choice in valid_choices for choice in choices):
                 return choices
-        elif user_input in CC:
+        elif user_input in valid_choices:
             return user_input
 
         prompt = "Invalid input. Please try again:\n>"
 
 def get_filters():
-    ## add coment in function get_filters()
     """Ask the user to specify city(ies), month(s), and day(s)."""
     print("\nLet's explore some US bikeshare data!\n")
     print("Type 'end' at any time to exit the program.\n")
@@ -50,8 +48,6 @@ def get_filters():
         return get_filters()
 
 def load_data(city, month, day):
-    ## add coment in function load_data
-
     """Load and filter data based on the user's choices."""
     print("\nLoading data...")
     start_time = time.time()
