@@ -1,0 +1,50 @@
+Q1- 
+SELECT f.title,
+       c.name,
+       COUNT(r.rental_id) AS rental_count
+  FROM category AS c
+       JOIN film_category AS fc
+        ON c.category_id = fc.category_id
+       JOIN film AS f
+        ON fc.film_id = f.film_id
+       JOIN inventory AS i
+        ON f.film_id = i.film_id
+       JOIN rental AS r
+        ON i.inventory_id = r.inventory_id
+ WHERE c.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+ GROUP BY f.title, c.name
+ ORDER BY c.name, f.title;
+---------------------------------
+Q2-
+SELECT
+    f.title,
+    c.name,
+    f.rental_duration,
+    NTILE(4) OVER (ORDER BY f.rental_duration) AS standard_quartile
+FROM
+    film f
+    JOIN film_category fc ON fc.film_id = f.film_id
+    JOIN category c ON c.category_id = fc.category_id
+WHERE
+    c.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+ORDER BY
+    standard_quartile;
+
+---------------------------------
+Q3-
+SELECT t.name,
+       t.standard_quartile,
+       COUNT(*)
+  FROM (
+        SELECT c.name,
+               NTILE(4) OVER (ORDER BY f.rental_duration) AS standard_quartile
+          FROM category AS c
+          JOIN film_category AS fc
+            ON c.category_id = fc.category_id 
+          JOIN film AS f
+            ON f.film_id = fc.film_id
+         WHERE c.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+       ) AS t
+ GROUP BY t.name, t.standard_quartile
+ ORDER BY t.name, t.standard_quartile;
+

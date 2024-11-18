@@ -1,0 +1,111 @@
+Q1-
+SELECT
+    DATE_PART('month', r.rental_date) AS rental_month,
+    DATE_PART('year', r.rental_date) AS rental_year,
+    s.store_id,
+    COUNT(*) AS count_rentals
+FROM
+    rental r
+    JOIN staff s ON r.staff_id = s.staff_id
+    JOIN store st ON s.store_id = st.store_id
+GROUP BY
+    rental_month,
+    rental_year,
+    s.store_id
+ORDER BY
+    count_rentals DESC;
+-------------------------------
+
+Q2-
+WITH t1 AS (
+    SELECT 
+        (c.first_name || ' ' || c.last_name) AS full_name, 
+        c.customer_id, 
+        p.amount, 
+        p.payment_date
+    FROM 
+        customer AS c
+        JOIN payment AS p ON c.customer_id = p.customer_id
+),
+
+t2 AS (
+    SELECT 
+        t1.customer_id
+    FROM 
+        t1
+    GROUP BY 
+        t1.customer_id
+    ORDER BY 
+        SUM(t1.amount) DESC
+    LIMIT 10
+)
+
+SELECT 
+    TO_CHAR(t1.payment_date, 'YYYY-MM') || '-01T00:00:00.000Z' AS pay_mon,
+    t1.full_name,
+    COUNT(*) AS countpermon,
+    SUM(t1.amount) AS pay_amount
+FROM 
+    t1
+    JOIN t2 ON t1.customer_id = t2.customer_id
+WHERE 
+    t1.payment_date BETWEEN '2007-01-01' AND '2008-01-01'
+GROUP BY 
+    TO_CHAR(t1.payment_date, 'YYYY-MM'),
+    t1.full_name
+ORDER BY 
+    t1.full_name,
+    TO_CHAR(t1.payment_date, 'YYYY-MM');
+
+
+
+
+
+----------------------
+Q3-
+WITH top_customers AS (
+    SELECT 
+        c.customer_id
+    FROM 
+        customer AS c
+        JOIN payment AS p ON c.customer_id = p.customer_id
+    WHERE
+        p.payment_date BETWEEN '2007-01-01' AND '2008-01-01'
+    GROUP BY 
+        c.customer_id
+    ORDER BY 
+        SUM(p.amount) DESC
+    LIMIT 10
+),
+
+monthly_payments AS (
+    SELECT 
+        CONCAT(c.first_name, ' ', c.last_name) AS name,
+        DATE_TRUNC('month', p.payment_date) AS payment_month, 
+        COUNT(*) AS count_per_month,
+        SUM(p.amount) AS total_amount,
+        LEAD(SUM(p.amount)) OVER(PARTITION BY c.customer_id ORDER BY DATE_TRUNC('month', p.payment_date)) AS next_month_total_amount,
+        LEAD(SUM(p.amount)) OVER(PARTITION BY c.customer_id ORDER BY DATE_TRUNC('month', p.payment_date)) - SUM(p.amount) AS difference
+    FROM 
+        customer AS c
+        JOIN payment AS p ON c.customer_id = p.customer_id
+        JOIN top_customers AS tc ON c.customer_id = tc.customer_id
+    GROUP BY 
+        c.customer_id, name, DATE_TRUNC('month', p.payment_date)
+)
+
+SELECT 
+    name,
+    payment_month,
+    count_per_month,
+    total_amount,
+    next_month_total_amount,
+    difference,
+    CASE
+        WHEN difference = (SELECT MAX(difference) FROM monthly_payments) THEN 'this is the maximum difference'
+        ELSE NULL
+    END AS is_max
+FROM 
+    monthly_payments
+ORDER BY 
+    name, payment_month;

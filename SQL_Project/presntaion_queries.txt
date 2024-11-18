@@ -1,0 +1,61 @@
+Q1-
+
+SELECT 
+    DATE_TRUNC('month', p.payment_date) AS payment_month, 
+    SUM(p.amount) AS total_spending
+FROM 
+    customer AS c
+JOIN 
+    payment AS p ON c.customer_id = p.customer_id
+GROUP BY 
+    payment_month
+ORDER BY 
+    payment_month;
+-----------------------------
+Q2-
+
+SELECT 
+    c.name AS category,
+    COUNT(*) AS return_count
+FROM 
+    category AS c
+JOIN 
+    film_category AS fc ON c.category_id = fc.category_id
+JOIN 
+    film AS f ON fc.film_id = f.film_id
+JOIN 
+    inventory AS i ON f.film_id = i.film_id
+JOIN 
+    rental AS r ON i.inventory_id = r.inventory_id
+WHERE 
+    r.return_date IS NOT NULL
+GROUP BY 
+    category;
+--------------------------
+Q3-
+SELECT 
+    DATE_TRUNC('month', r.rental_date) AS rental_month, 
+    COUNT(*) AS total_rentals
+FROM 
+    rental AS r
+GROUP BY 
+    rental_month
+ORDER BY 
+    rental_month;
+-----------------------------
+Q4-
+SELECT 
+    f.title AS film_title,
+    COUNT(*) AS total_rentals
+FROM 
+    film AS f
+JOIN 
+    inventory AS i ON f.film_id = i.film_id
+JOIN 
+    rental AS r ON i.inventory_id = r.inventory_id
+GROUP BY 
+    film_title
+ORDER BY 
+    total_rentals DESC
+LIMIT 10;
+
